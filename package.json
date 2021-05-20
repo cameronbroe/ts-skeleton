@@ -1,8 +1,10 @@
 {
   "name": "@cameronbroe/ts-skeleton",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "My personal TypeScript library skeleton",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "test": "jest",
     "build": "tsc",
