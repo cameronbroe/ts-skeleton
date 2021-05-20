@@ -1,7 +1,9 @@
 name: Release
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -9,11 +11,13 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
       - run: npm ci
-      - run: npm run lint
       - run: npm run build
-      - run: npm run test
       - run: git config --global user.name "github-actions[bot]"
       - run: git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - run: "npx standard-version --releaseCommitMessageFormat 'chore(release): [ci skip] {{currentTag}}'"
       - run: git push -u origin main
       - run: git push --tags
+      - run: npm config set //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
+        env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm publish
